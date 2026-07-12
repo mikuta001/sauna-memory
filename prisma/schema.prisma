@@ -13,3 +13,67 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Visits {
+  id               Int                @id @default(autoincrement())
+  sauna_id         Int
+  user_id          Int
+  comment          String             @db.VarChar(140)
+  review_rating    Decimal
+  visited_at       DateTime
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
+  sauna            Saunas             @relation(fields: [sauna_id], references: [id])
+  user             Users              @relation(fields: [user_id], references: [id])
+  visit_companions Visit_companions[]
+  visit_images     Visit_images[]
+}
+
+model Users {
+  id         Int          @id @default(autoincrement())
+  email      String       @db.VarChar(255)
+  name       String       @db.VarChar(50)
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  visits     Visits[]
+  companions Companions[]
+}
+
+model Saunas {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  image_path String   @db.VarChar(1000)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  visits     Visits[]
+}
+
+model Companions {
+  id               Int                @id @default(autoincrement())
+  user_id          Int
+  name             String             @db.VarChar(50)
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
+  user             Users              @relation(fields: [user_id], references: [id])
+  visit_companions Visit_companions[]
+}
+
+model Visit_companions {
+  id           Int        @id @default(autoincrement())
+  visit_id     Int
+  companion_id Int
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  visit        Visits     @relation(fields: [visit_id], references: [id])
+  companion    Companions @relation(fields: [companion_id], references: [id])
+}
+
+model Visit_images {
+  id           Int        @id @default(autoincrement())
+  visit_id     Int
+  image_path   String     @db.VarChar(1000)
+  seq_no       Int
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  visit        Visits     @relation(fields: [visit_id], references: [id])
+}
