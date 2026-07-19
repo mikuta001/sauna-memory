@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import NavigationBar from "./components/NavigationBar";
 
 export const metadata: Metadata = {
   title: "Sauna Memory",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={"h-full antialiased"}>
-      <body>{children}</body>
+      <body className="pb-14 md:pb-0 md:pl-56">
+        {children}
+        <NavigationBar />
+      </body>
     </html>
   );
 }
