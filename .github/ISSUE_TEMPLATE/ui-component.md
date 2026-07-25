@@ -1,7 +1,7 @@
 ---
 name: UI Component
 about: UIコンポーネント
-title: "[FE]Component"
+title: "[UI]Component"
 labels: ''
 assignees: mikuta001
 

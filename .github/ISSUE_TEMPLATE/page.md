@@ -1,9 +1,9 @@
 ---
 name: Page
 about: ページ
-title: "[FE]"
+title: "[UI]Page"
 labels: ''
-assignees: ''
+assignees: mikuta001
 
 ---
 
