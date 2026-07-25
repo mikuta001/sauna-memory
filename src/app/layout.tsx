@@ -15,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="ja" className={"h-full antialiased"}>
       <body className="pb-14 md:pb-0 md:pl-56">
-        {children}
-        <NavigationBar />
+        <main className="min-h-screen p-4">
+          {children}
+          <NavigationBar />
+        </main>
       </body>
     </html>
   );
