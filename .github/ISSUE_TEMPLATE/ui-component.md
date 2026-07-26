@@ -42,14 +42,6 @@ assignees: mikuta001
 ## 状態
 <!-- 不要な状態は削除する -->
 
-| 状態       | 説明 |
-| -------- | -- |
-| Default  |    |
-| Hover    |    |
-| Focus    |    |
-| Disabled |    |
-| Error    |    |
-
 ---
 
 ## Example
