@@ -15,6 +15,7 @@ import type { SaunaComboboxProps, SaunaOption } from "./type";
 
 const SaunaCombobox = ({
   label,
+  hideLabel = false,
   options,
   value,
   onChange,
@@ -55,8 +56,14 @@ const SaunaCombobox = ({
 
   return (
     <Field>
-      <div className="w-full max-w-sm">
-        <Label className="mb-1 block text-sm font-medium text-[var(--black)]">
+      <div className="w-full">
+        <Label
+          className={
+            hideLabel
+              ? "sr-only"
+              : "mb-1 block text-sm font-medium text-[var(--black)]"
+          }
+        >
           {label}
         </Label>
         <Combobox
