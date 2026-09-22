@@ -39,7 +39,7 @@ export default function SaunaSelectForm({ options }: SaunaSelectFormProps) {
       <button
         type="submit"
         disabled={!selectedSauna}
-        className="w-full rounded-md bg-[var(--black)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600 disabled:cursor-not-allowed disabled:opacity-40"
+        className="w-full rounded-md bg-[var(--black)] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600 disabled:cursor-not-allowed disabled:opacity-40"
       >
         次へ
       </button>

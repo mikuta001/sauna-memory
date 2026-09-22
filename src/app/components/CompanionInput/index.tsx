@@ -43,10 +43,10 @@ const CompanionInput = ({ companions, onChange }: CompanionInputProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="w-full">
       <label
         htmlFor="companion-input"
-        className="mb-1 block text-sm font-medium text-[var(--black)]"
+        className="mb-1 block text-sm font-normal text-neutral-500"
       >
         同行者
       </label>
@@ -55,6 +55,7 @@ const CompanionInput = ({ companions, onChange }: CompanionInputProps) => {
         <input
           id="companion-input"
           type="text"
+          maxLength={50}
           value={inputValue}
           onChange={(event) => {
             isAddingRef.current = false;
@@ -68,7 +69,7 @@ const CompanionInput = ({ companions, onChange }: CompanionInputProps) => {
           type="button"
           onClick={handleAddCompanion}
           disabled={trimmedInputValue === ""}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
+          className="rounded-md bg-[var(--black)] px-3 py-2 text-sm font-normal text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
         >
           追加
         </button>
