@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { href: "/home", label: "ホーム", icon: House },
   { href: "/album", label: "アルバム", icon: Album },
-  { href: "/records/sauna", label: "記録", icon: SquarePlus },
+  { href: "/create/sauna", label: "記録", icon: SquarePlus },
   { href: "/mypage", label: "マイページ", icon: UserRound },
 ];
 
