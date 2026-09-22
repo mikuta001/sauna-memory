@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import NavigationBar from "./components/NavigationBar";
+import "../globals.css";
+import NavigationBar from "../components/NavigationBar";
 
 export const metadata: Metadata = {
   title: "Sauna Memory",
