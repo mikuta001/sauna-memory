@@ -17,7 +17,7 @@ datasource db {
 model Visits {
   id               Int                @id @default(autoincrement())
   sauna_id         Int
-  user_id          Int
+  user_id          String             @db.Uuid
   comment          String             @db.VarChar(140)
   review_rating    Decimal
   visited_at       DateTime
@@ -30,7 +30,7 @@ model Visits {
 }
 
 model Users {
-  id         Int          @id @default(autoincrement())
+  id         String       @id @db.Uuid
   email      String       @db.VarChar(255)
   name       String       @db.VarChar(50)
   created_at DateTime     @default(now())
@@ -50,7 +50,7 @@ model Saunas {
 
 model Companions {
   id               Int                @id @default(autoincrement())
-  user_id          Int
+  user_id          String             @db.Uuid
   name             String             @db.VarChar(50)
   created_at       DateTime           @default(now())
   updated_at       DateTime           @updatedAt

@@ -8,8 +8,9 @@ import { validateVisit } from "./validation";
 export type VisitActionState = { message: string };
 
 // 認証実装後は、サーバー側で取得したログインユーザーの ID に置き換える。
+// 既存データの移行時は、開発用ユーザー（旧 ID: -1）もこの固定 UUID に対応させる。
 const DEVELOPMENT_USER = {
-  id: -1,
+  id: "9b291e42-c86a-4f3d-b972-21e687a93d05",
   email: "sauna-memory-dev@example.invalid",
   name: "開発用ユーザー",
 };
