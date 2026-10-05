@@ -4,6 +4,7 @@ export type RecordCardProps = {
   body: string;
   imageSrc?: string[];
   tagNames: string[];
+  href?: string;
 };
 
 export type RecordCardHeaderProps = {

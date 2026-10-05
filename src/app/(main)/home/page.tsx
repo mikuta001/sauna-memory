@@ -31,6 +31,7 @@ export default async function Home() {
                 rating={record.rating}
                 body={record.body}
                 tagNames={record.tagNames}
+                href={`/edit/sauna/${record.id}`}
               />
             ))}
           </div>
