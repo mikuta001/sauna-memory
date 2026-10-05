@@ -12,7 +12,7 @@ const RecordCard = ({
   const hasImageSrc = imageSrc !== undefined && imageSrc.length > 0;
 
   return (
-    <article className="flex flex-col gap-2 bg-[color:var(--white)] border border-gray-100 rounded-xs shadow-md p-2 md:max-w-2xl">
+    <article className="flex flex-col gap-2 bg-[color:var(--white)] border border-gray-100 rounded-xs shadow-md p-2 md:max-w-2xl transition duration-200 hover:-translate-y-1 hover:shadow-lg cursor">
       <RecordCardHeader title={title} rating={rating} />
       <p className="text-sm text-[var(--black)] my-2">{body}</p>
 
