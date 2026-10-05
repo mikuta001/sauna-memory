@@ -4,10 +4,10 @@ const RecordDateDisplay = ({ visitedAt }: RecordDateDisplayProps) => {
   const formatDateWithDay = (date: Date) => {
     const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
 
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const dayOfWeek = dayNames[date.getDay()];
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+    const dayOfWeek = dayNames[date.getUTCDay()];
 
     return `${year}年${month}月${day}日（${dayOfWeek}）`;
   };
