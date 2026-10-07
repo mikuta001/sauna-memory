@@ -6,20 +6,26 @@ import SaunaCombobox from "@/app/components/SaunaCombobox";
 import type { SaunaOption } from "@/app/components/SaunaCombobox/type";
 
 type SaunaSelectFormProps = {
+  nextPathBase: string;
   options: SaunaOption[];
+  selectedValue: string | null;
 };
 
-export default function SaunaSelectForm({ options }: SaunaSelectFormProps) {
+export default function SaunaSelectForm({
+  options,
+  selectedValue = null,
+  nextPathBase,
+}: SaunaSelectFormProps) {
   const router = useRouter();
-  const [saunaId, setSaunaId] = useState<string | null>(null);
+
+  const [saunaId, setSaunaId] = useState<string | null>(selectedValue);
   const selectedSauna = options.find((option) => option.id === saunaId);
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedSauna) return;
 
-    // 記録作成画面はこの ID から施設情報を取得する。
-    router.push(`/create/sauna/${encodeURIComponent(selectedSauna.id)}`);
+    router.push(`${nextPathBase}/${encodeURIComponent(selectedSauna.id)}`);
   };
 
   return (

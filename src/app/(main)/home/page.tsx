@@ -27,11 +27,11 @@ export default async function Home() {
             {dateRecords.map((record) => (
               <RecordCard
                 key={record.id}
-                title={record.title}
+                title={record.sauna.name}
                 rating={record.rating}
                 body={record.body}
                 tagNames={record.tagNames}
-                href={`/edit/sauna/${record.id}`}
+                href={`/edit/visits/${record.id}/sauna`}
               />
             ))}
           </div>

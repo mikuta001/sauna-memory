@@ -7,9 +7,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export type HomeRecord = Pick<
   RecordCardProps,
-  "title" | "rating" | "body" | "tagNames"
+  "rating" | "body" | "tagNames"
 > & {
   id: number;
+  sauna: {
+    id: number;
+    name: string;
+  };
   visitedAt: Date;
 };
 
@@ -25,7 +29,7 @@ export async function getHomeRecords(): Promise<HomeRecord[]> {
     select: {
       id: true,
       visited_at: true,
-      sauna: { select: { name: true } },
+      sauna: { select: { id: true, name: true } },
       review_rating: true,
       comment: true,
       visit_companions: {
@@ -37,7 +41,10 @@ export async function getHomeRecords(): Promise<HomeRecord[]> {
   return visits.map((visit) => ({
     id: visit.id,
     visitedAt: visit.visited_at,
-    title: visit.sauna.name,
+    sauna: {
+      id: visit.sauna.id,
+      name: visit.sauna.name,
+    },
     rating: visit.review_rating.toNumber(),
     body: visit.comment,
     tagNames: visit.visit_companions.map(({ companion }) => companion.name),
