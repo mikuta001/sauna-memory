@@ -35,7 +35,7 @@ function editPage({ signedOut = false, authError = false, owner = 'me', missing 
       } } };
     } },
     '@/lib/prisma': { prisma: {
-      visits: { async findFirst(query) {
+      visits: { async findUnique(query) {
         queries.push(query);
         return missing || query.where.user_id !== owner ? null : { sauna_id: 7 };
       } },

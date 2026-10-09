@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import VisitForm from "./VisitForm";
+import VisitForm from "@/app/components/VisitForm";
+import { createVisit } from "@/app/components/VisitForm/actions";
 
 export default async function CreateVisitPage({
   params,
@@ -12,7 +13,12 @@ export default async function CreateVisitPage({
   const { saunaId } = await params;
   // seed の負の ID も許可し、DB の Int の範囲内か確認する。
   const id = Number(saunaId);
-  if (!/^-?\d+$/.test(saunaId) || !Number.isInteger(id) || id < -2147483648 || id > 2147483647) {
+  if (
+    !/^-?\d+$/.test(saunaId) ||
+    !Number.isInteger(id) ||
+    id < -2147483648 ||
+    id > 2147483647
+  ) {
     notFound();
   }
 
@@ -38,7 +44,13 @@ export default async function CreateVisitPage({
       <h1 className="mb-4 text-xl font-bold leading-snug text-neutral-800 [overflow-wrap:anywhere]">
         {sauna.name}
       </h1>
-      <VisitForm saunaId={sauna.id} today={today} />
+      <VisitForm
+        today={today}
+        initialValues={{ visitedAt: today, comment: "", companions: [], rating: null }}
+        submitAction={createVisit.bind(null, sauna.id)}
+        submitLabel="投稿する"
+        pendingLabel="投稿中…"
+      />
     </section>
   );
 }

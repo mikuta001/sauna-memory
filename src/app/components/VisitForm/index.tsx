@@ -4,26 +4,24 @@ import { useActionState, useState } from "react";
 import { Paperclip } from "lucide-react";
 import CompanionInput from "@/app/components/CompanionInput";
 import RatingSlider from "@/app/components/RatingSlider";
-import type { Companion } from "@/app/components/CompanionInput/type";
-import { createVisit } from "./actions";
+import type { VisitFormProps } from "./type";
 
 const MAX_COMMENT_LENGTH = 140;
 
 export default function VisitForm({
-  saunaId,
   today,
-}: {
-  saunaId: number;
-  today: string;
-}) {
-  const [visitedAt, setVisitedAt] = useState(today);
-  const [comment, setComment] = useState("");
-  const [companions, setCompanions] = useState<Companion[]>([]);
-  const [rating, setRating] = useState<number | null>(null);
-  const [state, formAction, pending] = useActionState(
-    createVisit.bind(null, saunaId),
-    { message: "" },
-  );
+  initialValues,
+  submitAction,
+  submitLabel,
+  pendingLabel,
+}: VisitFormProps) {
+  const [visitedAt, setVisitedAt] = useState(initialValues.visitedAt);
+  const [comment, setComment] = useState(initialValues.comment);
+  const [companions, setCompanions] = useState(initialValues.companions);
+  const [rating, setRating] = useState(initialValues.rating);
+  const [state, formAction, pending] = useActionState(submitAction, {
+    message: "",
+  });
 
   return (
     <form action={formAction} aria-busy={pending}>
@@ -84,7 +82,7 @@ export default function VisitForm({
         <div className="space-y-3">
           {state.message && <p role="alert" className="text-sm text-red-600">{state.message}</p>} 
           <button type="submit" disabled={pending} className="min-h-12 w-full rounded-lg bg-[var(--black)] text-sm font-bold text-white hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-wait disabled:opacity-40">
-            {pending ? "投稿中…" : "投稿する"}
+            {pending ? pendingLabel : submitLabel}
           </button>
         </div>
       </fieldset>
