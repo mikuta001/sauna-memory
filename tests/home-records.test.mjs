@@ -21,7 +21,7 @@ function loadModule(file, dependencies) {
 function row(id, userId, visitedAt, createdAt) {
   return {
     id, user_id: userId, visited_at: new Date(visitedAt), created_at: new Date(createdAt),
-    sauna: { name: 'サウナ' }, review_rating: { toNumber: () => 4.5 }, comment: '感想',
+    sauna: { id: 7, name: 'サウナ' }, review_rating: { toNumber: () => 4.5 }, comment: '感想',
     visit_companions: id === 1 ? [{ companion: { name: '友人' } }] : [],
   };
 }
@@ -65,7 +65,7 @@ test('verified owner only, stable descending order, and display value conversion
   const records = await run();
   assert.deepEqual(Array.from(records, r => r.id), [4, 3, 2, 1]);
   assert.deepEqual(plain(records[3]), {
-    id: 1, visitedAt: '2026-09-01T00:00:00.000Z', title: 'サウナ', rating: 4.5, body: '感想', tagNames: ['友人'],
+    id: 1, visitedAt: '2026-09-01T00:00:00.000Z', sauna: { id: 7, name: 'サウナ' }, rating: 4.5, body: '感想', tagNames: ['友人'],
   });
   assert.ok(records[3].visitedAt instanceof Date);
   assert.equal(typeof records[3].rating, 'number');
@@ -74,7 +74,7 @@ test('verified owner only, stable descending order, and display value conversion
   assert.deepEqual(plain(state.queries[0]), {
     where: { user_id: 'user-a' },
     orderBy: [{ visited_at: 'desc' }, { created_at: 'desc' }, { id: 'desc' }],
-    select: { id: true, visited_at: true, sauna: { select: { name: true } }, review_rating: true, comment: true,
+    select: { id: true, visited_at: true, sauna: { select: { id: true, name: true } }, review_rating: true, comment: true,
       visit_companions: { select: { companion: { select: { name: true } } } } },
   });
 });
@@ -137,6 +137,7 @@ const cardHeader = loadModule('../src/app/components/RecordCard/RecordCardHeader
 const recordCard = loadModule('../src/app/components/RecordCard/index.tsx', {
   'react/jsx-runtime': jsxRuntime,
   './RecordCardHeader': cardHeader,
+  'next/link': { default: ({ children, ...props }) => jsxRuntime.jsx('a', { ...props, children }) },
   'next/image': { default: () => { throw Error('Images are outside this test'); } },
 });
 
@@ -159,7 +160,7 @@ for (const timeZone of ['UTC', 'Asia/Tokyo', 'America/Los_Angeles', 'Pacific/Kir
         [4, '2026-09-30'], [5, '2026-01-01'], [6, '2025-12-31'],
       ].map(([id, day]) => Object.freeze({
         id, visitedAt: new Date(`${day}T00:00:00.000Z`),
-        title: `施設${id}`, body: `感想${id}`, rating: 4.5, tagNames: [],
+        sauna: { id, name: `施設${id}` }, body: `感想${id}`, rating: 4.5, tagNames: [],
       }));
       // Unsorted date groups also sort correctly; order within a date is preserved.
       const records = Object.freeze([entries[5], ...entries.slice(0, 5)]);
@@ -175,7 +176,7 @@ for (const timeZone of ['UTC', 'Asia/Tokyo', 'America/Los_Angeles', 'Pacific/Kir
       assert.equal((html.match(/<section/g) || []).length, 4);
       assert.equal((html.match(/<article/g) || []).length, records.length);
       for (const record of records) {
-        assert.equal(html.split(record.title).length - 1, 1);
+        assert.equal(html.split(record.sauna.name).length - 1, 1);
         assert.equal(html.split(record.body).length - 1, 1);
       }
     } finally {
@@ -188,4 +189,25 @@ for (const timeZone of ['UTC', 'Asia/Tokyo', 'America/Los_Angeles', 'Pacific/Kir
 test('empty home renders no headings, groups, or cards', async () => {
   const html = renderToStaticMarkup(await homeWith([])());
   assert.doesNotMatch(html, /<h2|<section|<article/);
+});
+
+
+test('updated saved fields are reflected in the next home read and rendered edit link', async () => {
+  const { state, run } = setup();
+  await run();
+  const saved = state.rows[0];
+  saved.sauna = { id: 9, name: '変更先サウナ' };
+  saved.visited_at = new Date('2020-02-02');
+  saved.comment = '更新後の感想';
+  saved.review_rating = { toNumber: () => 0 };
+  saved.visit_companions = [{ companion: { name: '新しい友人' } }];
+  const records = await run();
+  const updated = records.find(record => record.id === saved.id);
+  assert.equal(records.length, 4);
+  assert.equal(updated.rating, 0);
+  assert.equal(updated.visitedAt.toISOString(), '2020-02-02T00:00:00.000Z');
+  const html = renderToStaticMarkup(await homeWith([updated])());
+  for (const text of ['変更先サウナ', '更新後の感想', '新しい友人', '/edit/visits/1/sauna']) {
+    assert.ok(html.includes(text));
+  }
 });

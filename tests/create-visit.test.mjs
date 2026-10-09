@@ -22,7 +22,7 @@ function loadModule(path, dependencies, globals = {}) {
   return exports;
 }
 
-const directory = '../src/app/(main)/create/sauna/[saunaId]/';
+const directory = '../src/app/components/VisitForm/';
 const validation = loadModule(`${directory}validation.ts`, {
   '@/app/constants/rating': { MAX_RATING: 5 },
 });
