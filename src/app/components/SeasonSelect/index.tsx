@@ -11,11 +11,11 @@ const SEASON_OPTIONS = [
   { value: "winter", label: "Winter" },
 ] as const;
 
-const SeasonSelect = ({ value, onChange }: SeasonSelectProps) => {
+const SeasonSelect = ({ value, onChange, disabled = false }: SeasonSelectProps) => {
   const groupName = useId();
 
   return (
-    <fieldset className="m-0 min-w-0 border-0 p-0">
+    <fieldset className="m-0 min-w-0 border-0 p-0" disabled={disabled}>
       <legend className="sr-only">Season</legend>
       <div className="grid grid-cols-[1.4fr_repeat(4,minmax(0,1fr))] border-b border-gray-300">
         {SEASON_OPTIONS.map((season) => (

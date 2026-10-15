@@ -1,36 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useTransition } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import YearSelect from "@/app/components/YearSelect";
-import type { SelectedYear } from "@/app/components/YearSelect/type";
 import SeasonSelect from "@/app/components/SeasonSelect";
-import type { Season } from "@/app/components/SeasonSelect/type";
 import VisitSummaryDisplay from "@/app/components/VisitSummaryDisplay";
 import NewSaunaVisitDisplay from "@/app/components/NewSaunaVisitDisplay";
 import HighestRatingSaunaDisplay from "@/app/components/HighestRatingSaunaDisplay";
 import SaunaFriendDisplay from "@/app/components/SaunaFriendDisplay";
 import AIFeedbackDisplay from "@/app/components/AIFeedbackDisplay";
 import { albumSampleData } from "./sample-data";
+import {
+  buildAlbumQuery,
+  FIRST_ALBUM_YEAR,
+  type AlbumSelection,
+} from "./selection";
 
-export default function AlbumContent() {
-  const [selectedYear, setSelectedYear] = useState<SelectedYear>(() =>
-    new Date().getFullYear(),
-  );
-  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
+export default function AlbumContent({
+  selectedYear,
+  selectedSeason,
+}: AlbumSelection) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  const updateSelection = (selection: AlbumSelection) => {
+    if (isPending) return;
+    const query = buildAlbumQuery(searchParams.toString(), selection);
+    startTransition(() => {
+      router.replace(`${pathname}?${query}${window.location.hash}`, {
+        scroll: false,
+      });
+    });
+  };
 
   return (
     <div className="mx-auto flex w-full min-w-0 max-w-2xl flex-col gap-8 [overflow-wrap:anywhere]">
-      <div className="space-y-4">
+      <div className="space-y-4" aria-busy={isPending}>
         <div className="flex justify-end">
           <YearSelect
             id="album-year"
-            firstRecordedYear={2024}
+            firstRecordedYear={FIRST_ALBUM_YEAR}
             value={selectedYear}
-            onChange={setSelectedYear}
+            onChange={(year) =>
+              updateSelection({ selectedYear: year, selectedSeason })
+            }
+            disabled={isPending}
           />
         </div>
         <div className="space-y-2 [&>div]:flex-wrap">
-          <SeasonSelect value={selectedSeason} onChange={setSelectedSeason} />
+          <SeasonSelect
+            value={selectedSeason}
+            onChange={(season) =>
+              updateSelection({ selectedYear, selectedSeason: season })
+            }
+            disabled={isPending}
+          />
         </div>
       </div>
 
