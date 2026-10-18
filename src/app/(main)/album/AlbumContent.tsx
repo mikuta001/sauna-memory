@@ -30,8 +30,7 @@ export default function AlbumContent({
     const query = buildAlbumQuery(searchParams.toString(), selection);
     startTransition(() => {
       router.replace(`${pathname}?${query}${window.location.hash}`, {
-        scroll: false,
-      });
+        scroll: false });
     });
   };
 
