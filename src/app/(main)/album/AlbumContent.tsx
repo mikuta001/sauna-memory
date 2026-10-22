@@ -15,11 +15,17 @@ import {
   FIRST_ALBUM_YEAR,
   type AlbumSelection,
 } from "./selection";
+import { type VisitSummaryDisplayProps } from "@/app/components/VisitSummaryDisplay/type";
+
+type AlbumContentProps = AlbumSelection & {
+  visitSummaryData: VisitSummaryDisplayProps
+}
 
 export default function AlbumContent({
   selectedYear,
   selectedSeason,
-}: AlbumSelection) {
+  visitSummaryData
+}: AlbumContentProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,8 +35,9 @@ export default function AlbumContent({
     if (isPending) return;
     const query = buildAlbumQuery(searchParams.toString(), selection);
     startTransition(() => {
-      router.replace(`${pathname}?${query}${window.location.hash}`, {
-        scroll: false });
+      router.replace(`${pathname}?${query}`, {
+        scroll: false,
+      });
     });
   };
 
@@ -63,7 +70,7 @@ export default function AlbumContent({
         <h2 id="album-summary-heading" className="text-lg font-bold">
           Sauna Summary
         </h2>
-        <VisitSummaryDisplay {...albumSampleData.summary} />
+        <VisitSummaryDisplay {...visitSummaryData} />
       </section>
 
       <section aria-labelledby="album-new-sauna-heading" className="space-y-3">
