@@ -93,3 +93,29 @@ export function getNewSaunaVisit(
 
   return firstVisitedSauna;
 }
+
+export function getHighestRatingSauna(records: UserRecord[]) {
+  const sortedRecords = [...records];
+  sortedRecords.sort((a, b) => {
+    const compare = b.rating.toNumber() - a.rating.toNumber();
+    if (compare === 0) {
+      return b.visitedAt.getTime() - a.visitedAt.getTime();
+    } else {
+      return compare;
+    }
+  });
+
+  const highestRatingSauna = {
+    records: sortedRecords.slice(0, 3).map((record) => {
+      return {
+        id: record.id.toString(),
+        name: record.sauna.name,
+        rating: record.rating.toNumber(),
+        visitedAt: record.visitedAt.toISOString(),
+        imagePath: null
+      }
+    })
+  }
+
+  return highestRatingSauna;
+}

@@ -17,17 +17,20 @@ import {
 } from "./selection";
 import { type VisitSummaryDisplayProps } from "@/app/components/VisitSummaryDisplay/type";
 import { type NewSaunaVisitDisplayProps } from "@/app/components/NewSaunaVisitDisplay/type";
+import { type HighestRatingSaunaDisplayProps } from "@/app/components/HighestRatingSaunaDisplay/type"; 
 
 type AlbumContentProps = AlbumSelection & {
   visitSummaryData: VisitSummaryDisplayProps,
-  newSaunaVisitData: NewSaunaVisitDisplayProps
+  newSaunaVisitData: NewSaunaVisitDisplayProps,
+  highestRatingSaunaData: HighestRatingSaunaDisplayProps
 }
 
 export default function AlbumContent({
   selectedYear,
   selectedSeason,
   visitSummaryData,
-  newSaunaVisitData
+  newSaunaVisitData,
+  highestRatingSaunaData
 }: AlbumContentProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -87,8 +90,7 @@ export default function AlbumContent({
         <h2 id="album-rating-heading" className="text-lg font-bold">
           Top-Rated Sauna Visits
         </h2>
-        <HighestRatingSaunaDisplay
-          records={albumSampleData.highestRatingRecords}
+        <HighestRatingSaunaDisplay {...highestRatingSaunaData}
         />
       </section>
 

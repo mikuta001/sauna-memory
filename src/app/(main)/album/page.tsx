@@ -7,7 +7,7 @@ import {
   type AlbumSearchParams,
 } from "./selection";
 import { Decimal } from "@prisma/client/runtime/library";
-import { getNewSaunaVisit, getVisitSummary } from "./aggregate";
+import { getHighestRatingSauna, getNewSaunaVisit, getVisitSummary } from "./aggregate";
 
 const PREVIOUS_SEASON = {
   spring: "winter",
@@ -67,8 +67,8 @@ export default async function AlbumPage({
     selection,
     preSelection,
   );
-
   const newSaunaVisitData = getNewSaunaVisit(usersAllRecords, userRecords);
+  const highestRatingSaunaData = getHighestRatingSauna(userRecords);
 
   return (
     <AlbumContent
@@ -76,6 +76,7 @@ export default async function AlbumPage({
       selectedSeason={selection.selectedSeason}
       visitSummaryData={visitSummaryData}
       newSaunaVisitData={newSaunaVisitData}
+      highestRatingSaunaData={highestRatingSaunaData}
     />
   );
 }
