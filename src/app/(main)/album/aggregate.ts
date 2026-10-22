@@ -54,3 +54,42 @@ export function getVisitSummary(
     comparison,
   };
 }
+
+export function getNewSaunaVisit(
+  allRecords: UserRecord[],
+  selectedRecords: UserRecord[],
+) {
+  const firstVisit = new Map<number, UserRecord>();
+  const selectedRecordIds = new Set(selectedRecords.map((record) => record.id));
+  let newSaunaRecords = [];
+
+  for (const record of allRecords) {
+    const saveRecord = firstVisit.get(record.sauna.id);
+    if (!saveRecord) {
+      firstVisit.set(record.sauna.id, record);
+    } else {
+      if (record.visitedAt.getTime() < saveRecord.visitedAt.getTime()) {
+        firstVisit.set(record.sauna.id, record);
+      }
+    }
+  }
+
+  for (const record of firstVisit.values()) {
+    if (selectedRecordIds.has(record.id)) {
+      newSaunaRecords.push(record);
+    }
+  }
+
+  const firstVisitedSauna = {
+    visits: newSaunaRecords.map((record) => {
+      return {
+        id: record.sauna.id.toString(),
+        name: record.sauna.name,
+        imageUrl: null,
+        visitedAt: record.visitedAt.toISOString(),
+      };
+    }),
+  };
+
+  return firstVisitedSauna;
+}

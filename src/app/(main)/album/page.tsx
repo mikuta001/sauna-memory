@@ -7,7 +7,7 @@ import {
   type AlbumSearchParams,
 } from "./selection";
 import { Decimal } from "@prisma/client/runtime/library";
-import { getVisitSummary } from "./aggregate";
+import { getNewSaunaVisit, getVisitSummary } from "./aggregate";
 
 const PREVIOUS_SEASON = {
   spring: "winter",
@@ -58,6 +58,9 @@ export default async function AlbumPage({
     preUserRecords = await getUserVisitRecords(preSelection);
   }
 
+  const usersAllRecords = await getUserVisitRecords({selectedYear: 'all', selectedSeason: null});
+
+
   const visitSummaryData = getVisitSummary(
     userRecords,
     preUserRecords,
@@ -65,11 +68,14 @@ export default async function AlbumPage({
     preSelection,
   );
 
+  const newSaunaVisitData = getNewSaunaVisit(usersAllRecords, userRecords);
+
   return (
     <AlbumContent
       selectedYear={selection.selectedYear}
       selectedSeason={selection.selectedSeason}
       visitSummaryData={visitSummaryData}
+      newSaunaVisitData={newSaunaVisitData}
     />
   );
 }

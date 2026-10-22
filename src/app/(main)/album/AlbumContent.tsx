@@ -16,15 +16,18 @@ import {
   type AlbumSelection,
 } from "./selection";
 import { type VisitSummaryDisplayProps } from "@/app/components/VisitSummaryDisplay/type";
+import { type NewSaunaVisitDisplayProps } from "@/app/components/NewSaunaVisitDisplay/type";
 
 type AlbumContentProps = AlbumSelection & {
-  visitSummaryData: VisitSummaryDisplayProps
+  visitSummaryData: VisitSummaryDisplayProps,
+  newSaunaVisitData: NewSaunaVisitDisplayProps
 }
 
 export default function AlbumContent({
   selectedYear,
   selectedSeason,
-  visitSummaryData
+  visitSummaryData,
+  newSaunaVisitData
 }: AlbumContentProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -77,7 +80,7 @@ export default function AlbumContent({
         <h2 id="album-new-sauna-heading" className="text-lg font-bold">
           New Saunas Visited
         </h2>
-        <NewSaunaVisitDisplay visits={albumSampleData.newSaunaVisits} />
+        <NewSaunaVisitDisplay {...newSaunaVisitData} />
       </section>
 
       <section aria-labelledby="album-rating-heading" className="space-y-3">
