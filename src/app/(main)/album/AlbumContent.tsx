@@ -18,11 +18,13 @@ import {
 import { type VisitSummaryDisplayProps } from "@/app/components/VisitSummaryDisplay/type";
 import { type NewSaunaVisitDisplayProps } from "@/app/components/NewSaunaVisitDisplay/type";
 import { type HighestRatingSaunaDisplayProps } from "@/app/components/HighestRatingSaunaDisplay/type"; 
+import { SaunaFriendDisplayProps } from "@/app/components/SaunaFriendDisplay/type";
 
 type AlbumContentProps = AlbumSelection & {
   visitSummaryData: VisitSummaryDisplayProps,
   newSaunaVisitData: NewSaunaVisitDisplayProps,
-  highestRatingSaunaData: HighestRatingSaunaDisplayProps
+  highestRatingSaunaData: HighestRatingSaunaDisplayProps,
+  saunaFriendData: SaunaFriendDisplayProps
 }
 
 export default function AlbumContent({
@@ -30,7 +32,8 @@ export default function AlbumContent({
   selectedSeason,
   visitSummaryData,
   newSaunaVisitData,
-  highestRatingSaunaData
+  highestRatingSaunaData,
+  saunaFriendData
 }: AlbumContentProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -98,7 +101,7 @@ export default function AlbumContent({
         <h2 id="album-friend-heading" className="text-lg font-bold">
           Sauna Friends
         </h2>
-        <SaunaFriendDisplay friend={albumSampleData.friend} />
+        <SaunaFriendDisplay {...saunaFriendData} />
       </section>
 
       <section aria-labelledby="album-feedback-heading" className="space-y-3">

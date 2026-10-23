@@ -1,3 +1,4 @@
+import { SaunaFriendDisplayProps } from "@/app/components/SaunaFriendDisplay/type";
 import { type UserRecord } from "./page";
 import { type AlbumSelection } from "./selection";
 import {
@@ -112,10 +113,75 @@ export function getHighestRatingSauna(records: UserRecord[]) {
         name: record.sauna.name,
         rating: record.rating.toNumber(),
         visitedAt: record.visitedAt.toISOString(),
-        imagePath: null
-      }
-    })
-  }
+        imagePath: null,
+      };
+    }),
+  };
 
   return highestRatingSauna;
+}
+
+export function getSaunaFriend(records: UserRecord[]):SaunaFriendDisplayProps {
+  const friends = new Map<string, { visitCount: number; lastVisitAt: Date }>();
+
+  for (const record of records) {
+    for (const tag of record.tagNames) {
+      const setFriend = friends.get(tag);
+      if (setFriend) {
+        friends.set(tag, {
+          visitCount: setFriend.visitCount + 1,
+          lastVisitAt:
+            setFriend.lastVisitAt.getTime() > record.visitedAt.getTime()
+              ? setFriend.lastVisitAt
+              : record.visitedAt,
+        });
+      } else {
+        friends.set(tag, { visitCount: 1, lastVisitAt: record.visitedAt });
+      }
+    }
+  }
+
+  let mostVisitFriend: {
+    name: string;
+    visitCount: number;
+    visitedAt: Date;
+  } | null = null;
+
+  for (const [name, value] of friends) {
+    if (!mostVisitFriend) {
+      mostVisitFriend = {
+        name,
+        visitCount: value.visitCount,
+        visitedAt: value.lastVisitAt,
+      };
+    } else {
+      if (mostVisitFriend.visitCount < value.visitCount) {
+        mostVisitFriend = {
+          name,
+          visitCount: value.visitCount,
+          visitedAt: value.lastVisitAt,
+        };
+      } else if (mostVisitFriend.visitCount === value.visitCount) {
+        mostVisitFriend =
+          mostVisitFriend.visitedAt.getTime() < value.lastVisitAt.getTime()
+            ? {
+                name,
+                visitCount: value.visitCount,
+                visitedAt: value.lastVisitAt,
+              }
+            : mostVisitFriend;
+      }
+    }
+  }
+
+  if (mostVisitFriend) {
+    return {
+      friend: {
+        name: mostVisitFriend.name,
+        visitCount: mostVisitFriend.visitCount,
+      },
+    };
+  } else {
+    return { friend: null };
+  }
 }
