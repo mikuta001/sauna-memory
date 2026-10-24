@@ -9,7 +9,6 @@ import NewSaunaVisitDisplay from "@/app/components/NewSaunaVisitDisplay";
 import HighestRatingSaunaDisplay from "@/app/components/HighestRatingSaunaDisplay";
 import SaunaFriendDisplay from "@/app/components/SaunaFriendDisplay";
 import AIFeedbackDisplay from "@/app/components/AIFeedbackDisplay";
-import { albumSampleData } from "./sample-data";
 import {
   buildAlbumQuery,
   FIRST_ALBUM_YEAR,
@@ -110,7 +109,6 @@ export default function AlbumContent({
         <AIFeedbackDisplay
           key={`${selectedYear}-${selectedSeason ?? "all"}`}
           selection={{ selectedYear, selectedSeason }}
-          feedback={albumSampleData.feedback}
         />
       </section>
     </div>

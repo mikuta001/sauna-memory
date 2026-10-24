@@ -3,7 +3,7 @@ import { useActionState } from "react";
 import { generateAIFeedback } from "@/app/(main)/album/action";
 import { type FeedbackState } from "@/app/(main)/album/action";
 
-const AIFeedbackDisplay = ({ feedback, selection }: AIFeedbackDisplayProps) => {
+const AIFeedbackDisplay = ({ selection }: AIFeedbackDisplayProps) => {
   const { selectedYear, selectedSeason } = selection;
   const [state, formAction, isPending] = useActionState<FeedbackState, FormData>(
     generateAIFeedback,

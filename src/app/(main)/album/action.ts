@@ -40,8 +40,6 @@ export async function generateAIFeedback(
 
     const aiFeedbackScript = await getAIFeedback(userRecords);
 
-    // throw new Error();
-
     return { status: "success", feedback: aiFeedbackScript };
   } catch {
     return { status: "error", message: "generate is fail..." };
