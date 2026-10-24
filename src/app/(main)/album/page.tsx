@@ -1,4 +1,3 @@
-import { Presentation } from "lucide-react";
 import AlbumContent from "./AlbumContent";
 import { getUserVisitRecords } from "./records";
 import {
@@ -8,7 +7,6 @@ import {
 } from "./selection";
 import { Decimal } from "@prisma/client/runtime/library";
 import { getHighestRatingSauna, getNewSaunaVisit, getSaunaFriend, getVisitSummary } from "./aggregate";
-import { getAIFeedback } from "./aiFeedback";
 
 const PREVIOUS_SEASON = {
   spring: "winter",
@@ -68,9 +66,6 @@ export default async function AlbumPage({
   const newSaunaVisitData = getNewSaunaVisit(usersAllRecords, userRecords);
   const highestRatingSaunaData = getHighestRatingSauna(userRecords);
   const saunaFriendData = getSaunaFriend(userRecords);
-
-  // const aiFeedbackData = await getAIFeedback();
-  // console.log("test", aiFeedbackData);
 
   return (
     <AlbumContent

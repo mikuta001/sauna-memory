@@ -62,7 +62,7 @@ export function getNewSaunaVisit(
 ) {
   const firstVisit = new Map<number, UserRecord>();
   const selectedRecordIds = new Set(selectedRecords.map((record) => record.id));
-  let newSaunaRecords = [];
+  const newSaunaRecords = [];
 
   for (const record of allRecords) {
     const saveRecord = firstVisit.get(record.sauna.id);
