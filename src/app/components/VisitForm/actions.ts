@@ -100,7 +100,11 @@ export async function updateVisit(
   _previousState: VisitActionState,
   formData: FormData,
 ): Promise<VisitActionState> {
-  if (!Number.isInteger(visitId) || visitId < -2147483648 || visitId > 2147483647) {
+  if (
+    !Number.isInteger(visitId) ||
+    visitId < -2147483648 ||
+    visitId > 2147483647
+  ) {
     return { message: "記録が見つかりません。選び直してください。" };
   }
   const result = validateVisit(saunaId, formData);
@@ -111,11 +115,17 @@ export async function updateVisit(
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) {
-      return { message: "ログイン状態を確認できませんでした。再度ログインしてお試しください。" };
+      return {
+        message:
+          "ログイン状態を確認できませんでした。再度ログインしてお試しください。",
+      };
     }
     userId = data.user.id;
   } catch {
-    return { message: "ログイン状態を確認できませんでした。再度ログインしてお試しください。" };
+    return {
+      message:
+        "ログイン状態を確認できませんでした。再度ログインしてお試しください。",
+    };
   }
 
   const { visitedAt, comment, rating, companionNames } = result.data;
@@ -149,9 +159,11 @@ export async function updateVisit(
           where: { user_id: userId, name },
           orderBy: { id: "asc" },
         });
-        const companion = existing ?? await tx.companions.create({
-          data: { user_id: userId, name },
-        });
+        const companion =
+          existing ??
+          (await tx.companions.create({
+            data: { user_id: userId, name },
+          }));
         companionIds.push(companion.id);
       }
 
@@ -166,7 +178,9 @@ export async function updateVisit(
     });
   } catch (error) {
     console.error("更新に失敗しました。", error);
-    return { message: "更新に失敗しました。時間をおいて、もう一度お試しください。" };
+    return {
+      message: "更新に失敗しました。時間をおいて、もう一度お試しください。",
+    };
   }
 
   revalidatePath("/home");

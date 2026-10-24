@@ -17,15 +17,15 @@ import {
 } from "./selection";
 import { type VisitSummaryDisplayProps } from "@/app/components/VisitSummaryDisplay/type";
 import { type NewSaunaVisitDisplayProps } from "@/app/components/NewSaunaVisitDisplay/type";
-import { type HighestRatingSaunaDisplayProps } from "@/app/components/HighestRatingSaunaDisplay/type"; 
+import { type HighestRatingSaunaDisplayProps } from "@/app/components/HighestRatingSaunaDisplay/type";
 import { SaunaFriendDisplayProps } from "@/app/components/SaunaFriendDisplay/type";
 
 type AlbumContentProps = AlbumSelection & {
-  visitSummaryData: VisitSummaryDisplayProps,
-  newSaunaVisitData: NewSaunaVisitDisplayProps,
-  highestRatingSaunaData: HighestRatingSaunaDisplayProps,
-  saunaFriendData: SaunaFriendDisplayProps
-}
+  visitSummaryData: VisitSummaryDisplayProps;
+  newSaunaVisitData: NewSaunaVisitDisplayProps;
+  highestRatingSaunaData: HighestRatingSaunaDisplayProps;
+  saunaFriendData: SaunaFriendDisplayProps;
+};
 
 export default function AlbumContent({
   selectedYear,
@@ -33,7 +33,7 @@ export default function AlbumContent({
   visitSummaryData,
   newSaunaVisitData,
   highestRatingSaunaData,
-  saunaFriendData
+  saunaFriendData,
 }: AlbumContentProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -93,8 +93,7 @@ export default function AlbumContent({
         <h2 id="album-rating-heading" className="text-lg font-bold">
           Top-Rated Sauna Visits
         </h2>
-        <HighestRatingSaunaDisplay {...highestRatingSaunaData}
-        />
+        <HighestRatingSaunaDisplay {...highestRatingSaunaData} />
       </section>
 
       <section aria-labelledby="album-friend-heading" className="space-y-3">
@@ -108,7 +107,11 @@ export default function AlbumContent({
         <h2 id="album-feedback-heading" className="text-lg font-bold">
           AI Feedback
         </h2>
-        <AIFeedbackDisplay feedback={albumSampleData.feedback} />
+        <AIFeedbackDisplay
+          key={`${selectedYear}-${selectedSeason ?? "all"}`}
+          selection={{ selectedYear, selectedSeason }}
+          feedback={albumSampleData.feedback}
+        />
       </section>
     </div>
   );

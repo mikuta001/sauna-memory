@@ -8,6 +8,7 @@ import {
 } from "./selection";
 import { Decimal } from "@prisma/client/runtime/library";
 import { getHighestRatingSauna, getNewSaunaVisit, getSaunaFriend, getVisitSummary } from "./aggregate";
+import { getAIFeedback } from "./aiFeedback";
 
 const PREVIOUS_SEASON = {
   spring: "winter",
@@ -35,7 +36,6 @@ export default async function AlbumPage({
 }) {
   const selection = parseAlbumSelection(await searchParams);
   let preSelection: AlbumSelection | null = { ...selection };
-
   if (selection.selectedYear !== "all") {
     if (
       selection.selectedSeason === null ||
@@ -68,6 +68,9 @@ export default async function AlbumPage({
   const newSaunaVisitData = getNewSaunaVisit(usersAllRecords, userRecords);
   const highestRatingSaunaData = getHighestRatingSauna(userRecords);
   const saunaFriendData = getSaunaFriend(userRecords);
+
+  // const aiFeedbackData = await getAIFeedback();
+  // console.log("test", aiFeedbackData);
 
   return (
     <AlbumContent
