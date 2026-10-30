@@ -4,6 +4,7 @@ import SignoutForm from "./SignoutForm";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import AccountInfo from "./AccountInfo";
+import PasswordChangeForm from "./PasswordChangeForm";
 
 const MyPage = async () => {
   const supabase = await createClient();
@@ -68,10 +69,14 @@ const MyPage = async () => {
       <section className="mt-3 flex flex-col gap-3">
         <h2>セキュリティ</h2>
         <hr />
+        <PasswordChangeForm />
       </section>
-      <div className="mx-auto w-full md:max-w-sm">
-        <SignoutForm />
-      </div>
+      <section className="mt-3 flex flex-col gap-3">
+        <hr />
+        <div className="mx-auto w-full md:max-w-sm">
+          <SignoutForm />
+        </div>
+      </section>
     </div>
   );
 };

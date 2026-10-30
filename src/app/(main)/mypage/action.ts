@@ -109,7 +109,8 @@ export async function updateUserEmail(
 
   const authFailure: UpdateUserEmailState = {
     status: "error",
-    message: "ログイン状態を確認できませんでした。時間をおいて再度お試しください。",
+    message:
+      "ログイン状態を確認できませんでした。時間をおいて再度お試しください。",
   };
 
   let supabase;
@@ -131,10 +132,17 @@ export async function updateUserEmail(
       select: { email: true },
     });
   } catch {
-    return { status: "error", message: "アカウント情報を取得できませんでした。時間をおいて再度お試しください。" };
+    return {
+      status: "error",
+      message:
+        "アカウント情報を取得できませんでした。時間をおいて再度お試しください。",
+    };
   }
   if (!profile) {
-    return { status: "error", message: "アカウント情報が見つからないため、変更できませんでした。" };
+    return {
+      status: "error",
+      message: "アカウント情報が見つからないため、変更できませんでした。",
+    };
   }
 
   // 同一アドレスの再送信ではAuthを更新しない。
@@ -148,15 +156,30 @@ export async function updateUserEmail(
         switch (error.code) {
           case "email_exists":
           case "user_already_exists":
-            return { status: "error", message: "このメールアドレスには変更できません。別のアドレスをお試しください。" };
+            return {
+              status: "error",
+              message:
+                "このメールアドレスには変更できません。別のアドレスをお試しください。",
+            };
           case "email_address_invalid":
           case "validation_failed":
-            return { status: "error", message: "有効なメールアドレスを入力してください。" };
+            return {
+              status: "error",
+              message: "有効なメールアドレスを入力してください。",
+            };
           case "over_request_rate_limit":
           case "over_email_send_rate_limit":
-            return { status: "error", message: "操作回数が上限に達しました。時間をおいて再度お試しください。" };
+            return {
+              status: "error",
+              message:
+                "操作回数が上限に達しました。時間をおいて再度お試しください。",
+            };
           default:
-            return { status: "error", message: "メールアドレスを変更できませんでした。時間をおいて再度お試しください。" };
+            return {
+              status: "error",
+              message:
+                "メールアドレスを変更できませんでした。時間をおいて再度お試しください。",
+            };
         }
       }
 
@@ -164,7 +187,8 @@ export async function updateUserEmail(
       if (data.user?.email?.toLowerCase() !== email) {
         return {
           status: "pending",
-          message: "メールアドレスの変更はまだ確定していません。確認メールが届いている場合は内容をご確認ください。",
+          message:
+            "メールアドレスの変更はまだ確定していません。確認メールが届いている場合は内容をご確認ください。",
         };
       }
       confirmedEmail = data.user.email;
@@ -172,7 +196,8 @@ export async function updateUserEmail(
       // 通信が途切れた場合、Auth側だけ変更済みの可能性もある。
       return {
         status: "error",
-        message: "変更結果を確認できませんでした。ページを再読み込みして現在のメールアドレスをご確認ください。",
+        message:
+          "変更結果を確認できませんでした。ページを再読み込みして現在のメールアドレスをご確認ください。",
       };
     }
   }
@@ -196,7 +221,8 @@ export async function updateUserEmail(
   if (syncFailed) {
     return {
       status: "warning",
-      message: "ログイン用メールアドレスは変更済みですが、アカウント情報への反映に失敗しました。入力を変えずに「更新」を押すと反映を再試行できます。",
+      message:
+        "ログイン用メールアドレスは変更済みですが、アカウント情報への反映に失敗しました。入力を変えずに「更新」を押すと反映を再試行できます。",
     };
   }
   return {
@@ -205,4 +231,103 @@ export async function updateUserEmail(
       ? "現在のメールアドレスと同じです。アカウント情報への反映を確認しました。"
       : "メールアドレスを変更しました。次回から新しいメールアドレスでログインしてください。",
   };
+}
+
+export type UpdatePasswordState = {
+  status: "idle" | "success" | "error";
+  message: string;
+  errors?: Partial<Record<PasswordField, string[]>>;
+};
+
+type PasswordField = "password" | "newPassword" | "newPasswordConfirm";
+
+export async function updatePassword(
+  _previousState: UpdatePasswordState,
+  formData: FormData,
+): Promise<UpdatePasswordState> {
+  const getText = (field: PasswordField): string => {
+    const value = formData.get(field);
+    return typeof value === "string" ? value : "";
+  };
+  const password = getText("password");
+  const newPassword = getText("newPassword");
+  const newPasswordConfirm = getText("newPasswordConfirm");
+  const errors: UpdatePasswordState["errors"] = {};
+
+  // password validation
+  if (!password.trim()) {
+    errors.password = ["パスワードを入力してください。"];
+  }
+
+  if (!newPassword.trim()) {
+    errors.newPassword = ["パスワードを入力してください。"];
+  } else {
+    const passwordErrors: string[] = [];
+    if (Array.from(newPassword).length < 6) {
+      passwordErrors.push("パスワードは6文字以上で入力してください。");
+    }
+    if (
+      !/[A-Z]/.test(newPassword) ||
+      !/[a-z]/.test(newPassword) ||
+      !/[0-9]/.test(newPassword) ||
+      !/[!-/:-@\[-`{-~]/.test(newPassword)
+    ) {
+      passwordErrors.push(
+        "パスワードには半角の英大文字・英小文字・数字・記号（例：!、@、#）をそれぞれ1文字以上含めてください。",
+      );
+    }
+    if (passwordErrors.length > 0) {
+      errors.newPassword = passwordErrors;
+    }
+  }
+
+  if (!newPasswordConfirm.trim()) {
+    errors.newPasswordConfirm = ["確認用のパスワードを入力してください。"];
+  } else if (newPassword.trim() && newPassword !== newPasswordConfirm) {
+    errors.newPasswordConfirm = [
+      "パスワードが一致していません。同じパスワードをもう一度入力してください。",
+    ];
+  }
+
+  // validationエラーがある場合は処理を止める
+  if (Object.keys(errors).length > 0) {
+    return {
+      status: "error",
+      message: "入力内容を確認してください。",
+      errors,
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const { data, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !data.user) {
+      return {
+        status: "error",
+        message:
+          "ログイン状態を確認できませんでした。再度ログインしてお試しください。",
+      };
+    }
+
+    const { error: updateError } = await supabase.auth.updateUser({
+      current_password: password,
+      password: newPassword,
+    });
+
+    if (updateError) {
+      return {
+        status: "error",
+        message: "パスワードを変更できませんでした。入力内容をご確認ください。",
+      };
+    }
+
+    return { status: "success", message: "パスワードを変更しました。" };
+  } catch {
+    return {
+      status: "error",
+      message:
+        "変更結果を確認できませんでした。時間をおいて再度お試しください。",
+    };
+  }
 }
