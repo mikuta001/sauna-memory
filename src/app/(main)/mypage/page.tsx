@@ -69,7 +69,9 @@ const MyPage = async () => {
       <section className="mt-3 flex flex-col gap-3">
         <h2>セキュリティ</h2>
         <hr />
-        <PasswordChangeForm />
+        <div className="mx-auto w-full md:max-w-sm">
+          <PasswordChangeForm />
+        </div>
       </section>
       <section className="mt-3 flex flex-col gap-3">
         <hr />
