@@ -2,8 +2,10 @@ import Image from "next/image";
 import RecordCardHeader from "./RecordCardHeader";
 import type { RecordCardProps } from "./type";
 import Link from "next/link";
+import DeleteVisitButton from "./DeleteVisitButton";
 
 const RecordCard = ({
+  id,
   title,
   rating,
   body,
@@ -52,6 +54,7 @@ const RecordCard = ({
           })}
         </div>
         {hasHref && <Link href={href} className="self-end text-sm border border-gray-300 rounded-md p-2 inline-flex. items-center justify-center bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">編集</Link>}
+        <DeleteVisitButton visitId={id} />
       </div>
     </article>
   );

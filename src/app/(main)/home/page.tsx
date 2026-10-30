@@ -26,6 +26,7 @@ export default async function Home() {
           <div className="flex flex-col gap-4">
             {dateRecords.map((record) => (
               <RecordCard
+                id={record.id}
                 key={record.id}
                 title={record.sauna.name}
                 rating={record.rating}
