@@ -1,4 +1,5 @@
 export type RecordCardProps = {
+  id: number;
   title: string;
   rating: number;
   body: string;
@@ -10,4 +11,8 @@ export type RecordCardProps = {
 export type RecordCardHeaderProps = {
   title: string;
   rating: number;
+};
+
+export type DeleteVisitButtonProps = {
+  visitId: number;
 };
