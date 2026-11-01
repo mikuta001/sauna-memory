@@ -15,7 +15,5 @@ export async function getAIFeedback(userRecords: UserRecord[]) {
     instructions:  "入力された集計データ(サウナ活動記録)をもとに、日本語で、モチベーションが上がる、短い振り返りを書いてください。データにない事実は追加しないでください。",
   });
 
-  // const response = "feedback script from openai!!!!!";
-
   return response.output_text;
 }

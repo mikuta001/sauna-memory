@@ -24,7 +24,6 @@ const MyPage = async () => {
       redirect("/signin");
     }
 
-    // 通信障害・サーバ障害等
     return (
       <p>
         ログイン状態を確認できませんでした。時間をおいて再度お試しください。

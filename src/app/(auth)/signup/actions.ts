@@ -11,7 +11,6 @@ export type signUpState = {
   fieldErrors?: Partial<Record<SignUpField, string[]>>;
 };
 
-// Users.name / Users.email の VarChar 上限に合わせる。
 const USERNAME_MAX_LENGTH = 50;
 const EMAIL_MAX_LENGTH = 255;
 const EMAIL_PATTERN =

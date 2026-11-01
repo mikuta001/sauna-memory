@@ -254,7 +254,6 @@ export async function updatePassword(
   const newPasswordConfirm = getText("newPasswordConfirm");
   const errors: UpdatePasswordState["errors"] = {};
 
-  // password validation
   if (!password.trim()) {
     errors.password = ["パスワードを入力してください。"];
   }

@@ -22,7 +22,6 @@ export async function getHomeRecords(): Promise<HomeRecord[]> {
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) redirect("/signin");
 
-  // Cookie で検証したユーザーに限定し、取得結果はキャッシュしない。
   const visits = await prisma.visits.findMany({
     where: { user_id: data.user.id },
     orderBy: [{ visited_at: "desc" }, { created_at: "desc" }, { id: "desc" }],

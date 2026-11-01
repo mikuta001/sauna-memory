@@ -8,15 +8,6 @@ import type { RatingSliderProps } from "./type";
 const MIN_RATING = 0;
 const RATING_STEP = 0.5;
 const DEFAULT_SLIDER_VALUE = MIN_RATING;
-// const RATING_VALUES = Array.from(
-//   { length: (MAX_RATING - MIN_RATING) / RATING_STEP + 1 },
-//   (_, index) => MIN_RATING + index * RATING_STEP,
-// );
-
-// const INTEGER_RATINGS = Array.from(
-//   { length: MAX_RATING - MIN_RATING + 1 },
-//   (_, index) => MIN_RATING + index,
-// );
 
 const RatingSlider = ({
   value,
@@ -73,26 +64,6 @@ const RatingSlider = ({
           className={`${styles.input} h-12 w-full cursor-pointer appearance-none bg-transparent focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-yellow-600/35`}
         />
       </div>
-
-      {/* <div className="mx-[14px] text-neutral-500" aria-hidden="true">
-        <div className="flex h-2 items-start justify-between">
-          {RATING_VALUES.map((rating) => (
-            <span
-              key={rating}
-              className={
-                Number.isInteger(rating)
-                  ? "h-2 w-px bg-current"
-                  : "h-1 w-px bg-current opacity-[0.55]"
-              }
-            />
-          ))}
-        </div>
-        <div className="mt-1 flex justify-between text-xs leading-4">
-          {INTEGER_RATINGS.map((rating) => (
-            <span key={rating}>{rating}</span>
-          ))}
-        </div>
-      </div> */}
 
       {hasError && (
         <p id={errorMessageId} className="text-sm text-red-600">

@@ -150,7 +150,6 @@ export default function SignupPage() {
         setSystemError(Object.keys(serverErrors).length ? "" : result.message);
         return result;
       } catch (error) {
-        // 成功時の redirect など、Next.js の制御用例外は握りつぶさない。
         unstable_rethrow(error);
         const message =
           "アカウントを作成できませんでした。時間をおいて再度お試しください。";

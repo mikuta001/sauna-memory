@@ -36,7 +36,6 @@ export default function SigninPage() {
         setSystemError(result.message);
         return result;
       } catch (error) {
-        // 成功時の redirect など、Next.js の制御用例外は握りつぶさない。
         unstable_rethrow(error);
         const message =
           "ログイン処理を完了できませんでした。通信環境を確認して、もう一度お試しください。";
