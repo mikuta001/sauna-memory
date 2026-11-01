@@ -7,8 +7,6 @@ export async function getAIFeedback(userRecords: UserRecord[]) {
   const client = new OpenAI();
   const data = JSON.stringify(userRecords);
 
-  console.log("called ai feedback!!!");
-
   const response = await client.responses.create({
     model: "gpt-6-astra",
     input: data,

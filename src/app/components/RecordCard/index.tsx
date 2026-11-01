@@ -41,7 +41,7 @@ const RecordCard = ({
         })}
 
       <div className="flex gap-2">
-        <div className="flex justify-start gap-2 grow">
+        <div className="flex justify-start gap-2 grow items-center">
           {tagNames.map((tagName: string) => {
             return (
               <p
